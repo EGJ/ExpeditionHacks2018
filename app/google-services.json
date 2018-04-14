@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "137204752812",
+    "firebase_url": "https://expeditionhacks-3aa89.firebaseio.com",
+    "project_id": "expeditionhacks-3aa89",
+    "storage_bucket": "expeditionhacks-3aa89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137204752812:android:f89cce61d9d12549",
+        "android_client_info": {
+          "package_name": "com.example.expeditionhacks2018"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137204752812-hni8ss4p9btpi1nhekp8fmigkjt8kkmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABt1OAoUVhz-zSaipZT-Rzbq2G-0s_6N8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
