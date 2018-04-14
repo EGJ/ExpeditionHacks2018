@@ -21,8 +21,19 @@ android {
     buildToolsVersion '27.0.3'
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
+
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compile (name:'HERE-sdk', ext:'aar')
+    compile 'com.google.code.gson:gson:2.8.0'
+
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'

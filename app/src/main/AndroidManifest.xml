@@ -2,13 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.expeditionhacks2018">
 
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <meta-data
+        android:name="com.here.android.maps.appid"
+        android:value="j8oivdaO6eRnnBdjQz5n" />
+    <meta-data
+        android:name="com.here.android.maps.apptoken"
+        android:value="YvmxWgFAqWwgdy8f-G7gzQ" />
+
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <service
+            android:name="com.here.android.mpa.service.MapService"
+            android:label="{YOUR_LABEL_NAME}"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="{YOUR_INTENT_NAME}">
+                </action>
+            </intent-filter>
+        </service>
+
         <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

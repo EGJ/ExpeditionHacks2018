@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.here.android.mpa.common.GeoCoordinate;
+import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.mapping.Map;
+import com.here.android.mpa.mapping.MapFragment;
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -22,6 +28,7 @@ public class MapTrackYourself extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -60,9 +67,19 @@ public class MapTrackYourself extends Fragment {
         }
     }
 
+
+    private Map map = null;
+    private MapFragment mapFragment = null;
+    private View mView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mView = inflater.inflate(R.layout.fragment_map_track_yourself, container, false);
+
+
+
 
 
 
@@ -74,7 +91,7 @@ public class MapTrackYourself extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_track_yourself, container, false);
+        return mView;
 
 
 
