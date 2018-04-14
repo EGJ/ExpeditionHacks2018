@@ -51,19 +51,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.addTab(tabLayout.newTab().setText("Twitter-care"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-//        viewPager = (ViewPager) findViewById(R.id.pager);
-//        MapFragment mapFragment = new MapFragment();
-//
-//
-//        viewPager.setOffscreenPageLimit(3);
-//
-//        final PageAdapter adapter = new PageAdapter
-//                (getSupportFragmentManager(), tabLayout.getTabCount(), cardFrag, mapFragment);
-//        viewPager.setAdapter(adapter);
-//
-//        tabLayout.setOnTabSelectedListener(this);
-//
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        //we want to create this here because if we were to return a new version in ther viewpager, it would create it over and over
+        //and we don't want to keep recreating the map.
+
+        MapReportingTool MapReportingTool = new MapReportingTool();
+        MapTrackYourself mapTrackYourself = new MapTrackYourself();
+
+
+
+        viewPager.setOffscreenPageLimit(3);
+
+        final PageAdapter adapter = new PageAdapter
+                (getSupportFragmentManager(), tabLayout.getTabCount(), mapTrackYourself, MapReportingTool);
+        viewPager.setAdapter(adapter);
+
+        tabLayout.setOnTabSelectedListener(this);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        //GoToSplashActivity here to fill in the data from firebase about the reporting tool
+
 //
 
 
