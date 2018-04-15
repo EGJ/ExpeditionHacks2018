@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pattern_phone_contacts"
+    tools:context="com.example.expeditionhacks2018.pinActivity">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mainActivityAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme"
+        android:layout_alignParentTop="true">
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize" />
+
+        <TextView
+            android:text="Validate Pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/vitechText"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@android:color/white" />
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:scaleType="center"
+        android:id="@+id/enterPin"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/colorPrimary"
+        app:fab_colorNormal="@color/colorPrimary"
+        android:src="@drawable/icon_small_plus"
+        />
+
+
+<com.chaos.view.PinView
+        android:id="@+id/pinView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Pin#."
+        android:layout_centerInParent="true"
+        android:inputType="text"
+        android:padding="100dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:cursorVisible="true"
+        app:cursorColor="@color/colorSecondary"
+        app:cursorWidth="2dp"
+        app:itemCount="5"
+        app:itemHeight="48dp"
+        app:itemRadius="4dp"
+        app:itemSpacing="0dp"
+        app:itemWidth="36dp"
+        app:lineColor="@color/colorPrimary"
+        app:lineWidth="2dp"
+        app:viewType="rectangle" />
+
+    <TextView
+        android:id="@+id/wrongAttemptText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pinView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:ems="10"
+        android:textColor="@color/red"
+        android:textAlignment="center"
+        android:inputType="textPersonName"
+        android:visibility="invisible"
+        android:text="Wrong Attempt" />
+
+</RelativeLayout>

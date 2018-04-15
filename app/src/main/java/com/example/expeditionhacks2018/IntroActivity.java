@@ -41,7 +41,7 @@ public class IntroActivity extends MaterialIntroActivity {
                         .buttonsColor(R.color.third_slide_buttons)
                         .possiblePermissions(null)
                         //.possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
-                        //.neededPermissions(new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION})
+                        .neededPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION})
                         //.image(R.drawable.img_equipment)
                         .title("We need these permissions!")
                         .description("In order to get you the best analysis from our side, we need you to offer us these permissions")

@@ -32,7 +32,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-
                 return mapTrackYourself;
             case 1:
                 return mapReportingTool;

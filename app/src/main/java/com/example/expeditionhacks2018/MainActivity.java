@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener, MapTrackYourself.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private  DrawerLayout dl;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.addTab(tabLayout.newTab().setText("Twitter-care"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+         viewPager = (ViewPager) findViewById(R.id.pager);
         //we want to create this here because if we were to return a new version in ther viewpager, it would create it over and over
         //and we don't want to keep recreating the map.
 
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+
 
     }
 

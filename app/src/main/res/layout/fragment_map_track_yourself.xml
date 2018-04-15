@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +10,14 @@
         android:layout_width="match_parent"
         android:id="@+id/map1"
         />
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="match_parent"
+        android:layout_height="21dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/google_progress"
@@ -19,15 +27,228 @@
         android:visibility="invisible"
         app:type="nexus_rotation_cross"/>
 
-    <fragment
-        android:id="@+id/autocomplete_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:layout_width="match_parent"
-        android:layout_height="21dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="19dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="30dp" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/icon_small_plus"
+        android:layout_marginLeft="10dp"
+        android:scaleType="center"
+        android:id="@+id/startFAB"
+        android:layout_marginBottom="10dp"
+        />
 
-</FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/google_progress"
+        android:background="@drawable/rounded_corners"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_above="@id/startFAB"
+        android:id="@+id/sliderContainer"
+        android:visibility="gone"
+        android:backgroundTint="#FFF">
+
+
+
+
+        <com.ramotion.fluidslider.FluidSlider
+            android:id="@+id/timeSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/clockImg"
+            app:size="small"
+            app:end_text="60"
+            android:layout_marginLeft="5dp"
+            android:paddingBottom="5dp"
+            app:start_text="10"
+            app:initial_position="0.3"
+            app:duration="@android:integer/config_mediumAnimTime"/>
+
+        <com.ramotion.fluidslider.FluidSlider
+            android:id="@+id/fluidSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/clockImg"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="20dp"
+            app:size="small"
+            app:end_text="15"
+            app:start_text="1"
+            app:initial_position="0.5"
+            app:duration="@android:integer/config_mediumAnimTime"/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Select Radius And Time" />
+
+        <ImageView
+            android:id="@+id/piImg"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/timeSlider"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/icon_pi" />
+
+        <ImageView
+            android:id="@+id/clockImg"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignBottom="@+id/fluidSlider"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/icon_clock" />
+
+        <ImageButton
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/icon_checkmark" />
+
+
+    </RelativeLayout>
+
+
+
+
+<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corners"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/destinationPicker"
+        android:visibility="gone"
+        android:backgroundTint="#FFF"
+
+        android:layout_below="@+id/google_progress">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/toTextInputLayer"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:paddingTop="10dp"
+            android:layout_toStartOf="@+id/sendIcon"
+
+            android:layout_height="wrap_content"
+            android:textColorHint="#000000">
+
+            <EditText
+                android:id="@+id/toEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Start"
+                android:textColor="#000000"
+                android:inputType="textAutoCorrect|textAutoComplete"
+                android:paddingTop="2dp">
+
+            </EditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/destinationTextInputLayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/sendIcon"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:textColorHint="#000000">
+
+            <EditText
+                android:id="@+id/destinationEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Destination"
+                android:inputType="textAutoCorrect|textAutoComplete"
+                android:paddingTop="2dp"
+                android:textColor="#000000">
+
+            </EditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/sendIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/icon_send" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toTextInputLayer"
+            android:layout_above="@id/destinationTextInputLayer"
+            android:paddingTop="45dp"
+            android:layout_alignBaseline="@id/sendIcon"
+            android:layout_toStartOf="@id/sendIcon"
+            android:layout_alignStart="@+id/destinationTextInputLayer"
+            android:layout_centerVertical="true"
+            android:src="@drawable/dotted" />
+
+        <ImageButton
+            android:id="@+id/locateMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:layout_toEndOf="@+id/toTextInputLayer"
+            android:src="@drawable/locaton_2"/>
+
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/autocomplete_fragment"
+        android:src="@drawable/icon_x" />
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/checkbox"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/sliderContainer"-->
+        <!--android:layout_toStartOf="@+id/exitButton"-->
+        <!--android:background="#00000000"-->
+        <!--android:baseline="@+id/editText"-->
+        <!--android:src="@drawable/icon_checkmark" />-->
+
+
+</RelativeLayout>
