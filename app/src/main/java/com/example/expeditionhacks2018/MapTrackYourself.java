@@ -243,6 +243,15 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
         fluidSlider = mView.findViewById(R.id.fluidSlider);
         radiusContainer = mView.findViewById(R.id.sliderContainer);
         timeSlider = mView.findViewById(R.id.timeSlider);
+
+        FloatingActionButton secretButton = mView.findViewById(R.id.secretButton);
+        secretButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), pinActivity.class));
+            }
+        });
+
         int min = 1;
         int max = 5;
         final int total = max - min;

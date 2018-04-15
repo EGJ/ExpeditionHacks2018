@@ -65,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private EditText emailtext;
     private EditText passwordtext;
     private EditText repasswordtext;
+    private EditText pinText;
     private RelativeLayout li;
     private RadioGroup designation;
     public Context signupcontext;
@@ -237,6 +238,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         passwordtext = (EditText) findViewById(R.id.sign_up_password_text);
         repasswordtext = (EditText) findViewById(R.id.sign_up_repassword_text);
         li = (RelativeLayout) findViewById(R.id.sign_up_relative);
+        pinText = (EditText) findViewById(R.id.sign_up_pin_text);
 
         final String userdept;
         RadioButton userdesgrdiobuttn;
@@ -447,6 +449,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         mDatabase1.child(user_id).child("time").setValue(currentDate);
 
+        String pin = pinText.getText().toString();
+        mDatabase1.child(user_id).child("pin").setValue(pin);
+
+        DataRelay dataRelay = (DataRelay) getApplicationContext();
+        dataRelay.pin = pin;
 
     }
 

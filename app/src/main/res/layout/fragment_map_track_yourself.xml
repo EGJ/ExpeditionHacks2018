@@ -37,6 +37,17 @@
         android:id="@+id/startFAB"
         android:layout_marginBottom="10dp"
         />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/icon_small_plus"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_marginLeft="10dp"
+        android:scaleType="center"
+        android:id="@+id/secretButton"
+        android:layout_marginBottom="10dp"
+        />
 
 
     <RelativeLayout

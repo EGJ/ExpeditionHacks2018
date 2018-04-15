@@ -27,8 +27,7 @@ public class pinActivity extends AppCompatActivity {
         enterPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pinView.getText().toString();
-                if (pinView.equals(dataRelay.pin))
+                if (pinView.getText().toString().equals(dataRelay.pin))
                 {
                     finish();
                 }

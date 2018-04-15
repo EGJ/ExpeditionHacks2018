@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class DataRelay extends Application {
     public Location someLocation;
-    public String pin;
+    public String pin = "12455";
     HashMap<LatLng, AnalysisResults> analysisResults = new HashMap<>();
     HashMap<String, Boolean> existingFences = new HashMap<>();
     //public HashMap<LatLng, ?> theMap = new HashMap<>();

@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:hint="Pin#."
         android:layout_centerInParent="true"
-        android:inputType="text"
+        android:inputType="number"
         android:padding="100dp"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
