@@ -1,5 +1,6 @@
 package com.example.expeditionhacks2018;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class IntroActivity extends MaterialIntroActivity {
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
                         .possiblePermissions(null)
+                        //.neededPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE})
                         //.possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
                         .neededPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION})
                         //.image(R.drawable.img_equipment)

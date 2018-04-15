@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -16,7 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,12 +51,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         navigationView.setNavigationItemSelectedListener(this);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Map View"));
-        tabLayout.addTab(tabLayout.newTab().setText("Recommended Plans"));
-        tabLayout.addTab(tabLayout.newTab().setText("Twitter-care"));
+        tabLayout.addTab(tabLayout.newTab().setText("Track Yourself"));
+        tabLayout.addTab(tabLayout.newTab().setText("Reporting Tool"));
+        tabLayout.addTab(tabLayout.newTab().setText("TBD?"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-         viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         //we want to create this here because if we were to return a new version in ther viewpager, it would create it over and over
         //and we don't want to keep recreating the map.
 
@@ -125,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
-
-
     }
 
     @Override
