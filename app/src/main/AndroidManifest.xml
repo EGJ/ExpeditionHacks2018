@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+
 
 
     <application
@@ -22,21 +26,10 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <meta-data
-            android:name="com.here.android.maps.appid"
-            android:value="j8oivdaO6eRnnBdjQz5n" />
-        <meta-data
-            android:name="com.here.android.maps.apptoken"
-            android:value="YvmxWgFAqWwgdy8f-G7gzQ" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCbe-k2sKK2i3ReNYvJLGTi7q5YMyGckaU"/>
 
-        <service
-            android:name="com.here.android.mpa.service.MapService"
-            android:label="{YOUR_LABEL_NAME}"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="{YOUR_INTENT_NAME}">
-                </action>
-            </intent-filter>
-        </service>
+
 
         <activity android:name=".LoginActivity">
             <intent-filter>

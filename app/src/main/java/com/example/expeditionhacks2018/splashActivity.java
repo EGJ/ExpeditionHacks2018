@@ -2,6 +2,7 @@ package com.example.expeditionhacks2018;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -12,7 +13,7 @@ import com.ldoublem.loadingviewlib.view.LVBlock;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class splashActivity extends AppCompatActivity {
+public class splashActivity extends AppCompatActivity  implements  AsyncLoginDelegate{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,11 @@ public class splashActivity extends AppCompatActivity {
         mLVBlock.setShadowColor(Color.GRAY);
         mLVBlock.startAnim(1000);
 
+        //this is an async task that returns here using interfaces which then goes to main activity
         getMapMarkersFromFirebase();
+        AsyncLogin asyncLogin = new AsyncLogin(this);
+        asyncLogin.delegate = this;
+        asyncLogin.execute("");
     }
 
     private void getMapMarkersFromFirebase(){
@@ -37,10 +42,16 @@ public class splashActivity extends AppCompatActivity {
         DataRelay dataRelay = (DataRelay) getApplicationContext();
         //dataRelay.map;
         */
+
+    }
+
+    @Override
+    public void processFinish(Location output) {
         LVBlock mLVBlock = (LVBlock) findViewById(R.id.lv_block);
         mLVBlock.stopAnim();
         Intent intent = new Intent(splashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+
     }
 }

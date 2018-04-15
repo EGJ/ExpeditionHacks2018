@@ -1,20 +1,43 @@
 package com.example.expeditionhacks2018;
 
+import android.Manifest;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
 import com.here.android.mpa.mapping.MapView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -25,7 +48,7 @@ import com.here.android.mpa.mapping.MapView;
  * Use the {@link MapTrackYourself#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapTrackYourself extends android.app.Fragment {
+public class MapTrackYourself extends Fragment implements OnMapReadyCallback, PlaceSelectionListener, GoogleMap.OnMyLocationButtonClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,48 +93,63 @@ public class MapTrackYourself extends android.app.Fragment {
     }
 
 
-    private Map map = null;
-    private MapFragment mapFragment = null;
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) + ContextCompat
+                .checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale
+                            (getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                Snackbar.make(getActivity().findViewById(android.R.id.content),
+                        "Please Grant Permissions to upload profile photo",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission
+                                                    .WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            2);
+                                }
+                            }
+                        }).show();
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission
+                                    .WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                            2);
+                }
+            }
+        } else {
+            // write your logic code if permission already granted
+        }
+    }
+
+
     private View mView;
+    private Location location;
+    private DataRelay dataRelay;
+    private GoogleMap map;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         mView = inflater.inflate(R.layout.fragment_map_track_yourself, container, false);
-
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapfragment);
-
-//    com.here.android.mpa.common.Map
-
-// Set up disk cache path for the map service for this application
-
-            mapFragment.init(new OnEngineInitListener() {
-                @Override
-                public void onEngineInitializationCompleted(OnEngineInitListener.Error error) {
-                    if (error == OnEngineInitListener.Error.NONE) {
-// retrieve a reference of the map from the map fragment
-                        map = mapFragment.getMap();
-// Set the map center to the Vancouver region (no animation)
-                        map.setCenter(new GeoCoordinate(49.196261, -123.004773, 0.0),
-                                Map.Animation.NONE);
-// Set the zoom level to the average between min and max
-                        map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 2);
-                    } else {
-                        System.out.println("ERROR: Cannot initialize Map Fragment");
-                    }
-                }
-            });
-
-
-
-
-
-
-
-
-
-
+        dataRelay = (DataRelay) getActivity().getApplicationContext();
+        location = dataRelay.someLocation;
 
 
 
@@ -148,6 +186,65 @@ public class MapTrackYourself extends android.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPlaceSelected(Place place) {
+
+    }
+
+    @Override
+    public void onError(Status status) {
+
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(getContext());
+        map = googleMap;
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        try {
+            zoomToLocation();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        CameraPosition somePosition = CameraPosition.builder().target(new LatLng(41.316324, -72.922343)).zoom(16).bearing(0).tilt(45).build();
+//        map.moveCamera(CameraUpdateFactory.newCameraPosition(somePosition));
+
+//        LatLng pp = new LatLng();
+
+    }
+
+    private void zoomToLocation() throws InterruptedException {
+        if (ActivityCompat.checkSelfPermission(mView.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(mView.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+
+            if (location != null) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                        .zoom(17)                   // Sets the zoom
+                        .bearing(90)                // Sets the orientation of the camera to east
+                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                        .build();                   // Creates a CameraPosition from the builder
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.getLatitude(), location.getLongitude())));
+
+
+            }
+            else {
+                requestPermissions(
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
     }
 
     /**

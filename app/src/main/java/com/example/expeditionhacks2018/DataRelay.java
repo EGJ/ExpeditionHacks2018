@@ -11,6 +11,6 @@ import java.util.HashMap;
 
 
 public class DataRelay extends Application {
-    //public Location someLocation;
+    public Location someLocation;
     //public HashMap<LatLng, ?> theMap = new HashMap<>();
 }

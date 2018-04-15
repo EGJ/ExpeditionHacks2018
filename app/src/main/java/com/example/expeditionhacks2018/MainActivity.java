@@ -3,6 +3,7 @@ package com.example.expeditionhacks2018;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -23,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener, MapTrackYourself.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private  DrawerLayout dl;
 
@@ -63,11 +64,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         viewPager.setOffscreenPageLimit(3);
 
         final PageAdapter adapter = new PageAdapter
-                (getFragmentManager(), tabLayout.getTabCount(), mapTrackYourself, MapReportingTool);
+                (getSupportFragmentManager(), tabLayout.getTabCount(), mapTrackYourself, MapReportingTool);
         viewPager.setAdapter(adapter);
 
         tabLayout.setOnTabSelectedListener(this);
-
+        viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         //GoToSplashActivity here to fill in the data from firebase about the reporting tool
@@ -132,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }
