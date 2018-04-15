@@ -48,7 +48,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapReportingTool extends Fragment implements OnMapReadyCallback, PlaceSelectionListener, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapClickListener {
+public class MapReportingTool extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMapClickListener {
 
     private View mView;
     private FloatingActionsMenu reportMenu;
@@ -79,6 +79,74 @@ public class MapReportingTool extends Fragment implements OnMapReadyCallback, Pl
         location = dataRelay.someLocation;
 
         setupReportMenu();
+
+        return mView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
+
+        super.onViewCreated(view, savedInstanceState);
+
+        mapView = mView.findViewById(R.id.map2);
+        mapView.onCreate(null);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+        @SuppressLint("ResourceType") View locationButton = ((View) mView.findViewById(1).getParent()).findViewById(2);
+
+        // and next place it, for exemple, on bottom right (as Google Maps app)
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+        // position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 30);
+
+
+        // Register a listener to receive callbacks when a place has been selected or an error has
+        // occurred.
+
+
+
+
+    }
+
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MapTrackYourself.OnFragmentInteractionListener) {
+            mListener = (MapTrackYourself.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(getContext());
+        map = googleMap;
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setOnMapClickListener(this);
+        try {
+            zoomToLocation();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         dbRef = FirebaseDatabase.getInstance().getReference().child("Reported Events");
 
@@ -122,90 +190,6 @@ public class MapReportingTool extends Fragment implements OnMapReadyCallback, Pl
                 Toast.makeText(getActivity(), "The read failed", Toast.LENGTH_SHORT).show();
             }
         });
-
-        return mView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
-
-        super.onViewCreated(view, savedInstanceState);
-
-        mapView = mView.findViewById(R.id.map2);
-        mapView.onCreate(null);
-        mapView.onResume();
-        mapView.getMapAsync(this);
-        PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        @SuppressLint("ResourceType") View locationButton = ((View) mView.findViewById(1).getParent()).findViewById(2);
-
-        // and next place it, for exemple, on bottom right (as Google Maps app)
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 30);
-
-
-        // Register a listener to receive callbacks when a place has been selected or an error has
-        // occurred.
-        autocompleteFragment.setOnPlaceSelectedListener(this);
-
-
-
-
-    }
-
-
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof MapTrackYourself.OnFragmentInteractionListener) {
-            mListener = (MapTrackYourself.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onPlaceSelected(Place place) {
-
-    }
-
-    @Override
-    public void onError(Status status) {
-
-    }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        return false;
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        MapsInitializer.initialize(getContext());
-        map = googleMap;
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setOnMapClickListener(this);
-        try {
-            zoomToLocation();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-//        CameraPosition somePosition = CameraPosition.builder().target(new LatLng(41.316324, -72.922343)).zoom(16).bearing(0).tilt(45).build();
-//        map.moveCamera(CameraUpdateFactory.newCameraPosition(somePosition));
-
-//        LatLng pp = new LatLng();
 
     }
 
