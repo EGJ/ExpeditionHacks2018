@@ -20,15 +20,15 @@ public class IntroActivity extends MaterialIntroActivity {
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
                         //.image(R.drawable.img_office)
-                        .title("Localized Healthcare: Visualized.")
-                        .description("Would you try?")
+                        .title("Crowed Sourced Reporting: Human Trafficking.")
+                        .description("Would you pic?")
                         .build(),
                 new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showMessage("We provide an all-in-one platform.");
                     }
-                }, "Engage with your care."));
+                }, "Engage, Protect, Analyze"));
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
@@ -56,8 +56,8 @@ public class IntroActivity extends MaterialIntroActivity {
                 }, "Give Permission!"));
 
         addSlide(new SlideFragmentBuilder()
-                .backgroundColor(R.color.third_slide_background)
-                .buttonsColor(R.color.third_slide_buttons)
+                .backgroundColor(R.color.colorPrimary)
+                .buttonsColor(R.color.colorSecondary)
                 .title("Get Started?")
                 .description("Sign Me Up!")
                 .build());
