@@ -9,12 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <meta-data
-        android:name="com.here.android.maps.appid"
-        android:value="j8oivdaO6eRnnBdjQz5n" />
-    <meta-data
-        android:name="com.here.android.maps.apptoken"
-        android:value="YvmxWgFAqWwgdy8f-G7gzQ" />
+
 
     <application
         android:name=".DataRelay"
@@ -25,6 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <meta-data
+            android:name="com.here.android.maps.appid"
+            android:value="j8oivdaO6eRnnBdjQz5n" />
+        <meta-data
+            android:name="com.here.android.maps.apptoken"
+            android:value="YvmxWgFAqWwgdy8f-G7gzQ" />
 
         <service
             android:name="com.here.android.mpa.service.MapService"

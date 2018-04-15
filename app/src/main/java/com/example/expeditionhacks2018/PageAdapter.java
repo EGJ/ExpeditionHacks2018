@@ -10,13 +10,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * Created by Greg on 4/14/18.
  */
 
-public class PageAdapter extends FragmentStatePagerAdapter {
+    public class PageAdapter extends android.support.v13.app.FragmentPagerAdapter {
     protected int numTabs = 0;
     MapReportingTool mapReportingTool;
     MapTrackYourself mapTrackYourself;
     SocialFragment socialFragment;
 
-    public PageAdapter(FragmentManager fm, int numTabs, MapTrackYourself mty, MapReportingTool mr)
+    public PageAdapter(android.app.FragmentManager fm, int numTabs, MapTrackYourself mty, MapReportingTool mr)
     {
         super(fm);
         this.numTabs = numTabs;
@@ -29,7 +29,7 @@ public class PageAdapter extends FragmentStatePagerAdapter {
 
 
     @Override
-    public Fragment getItem(int position) {
+    public android.app.Fragment getItem(int position) {
         switch (position) {
             case 0:
 

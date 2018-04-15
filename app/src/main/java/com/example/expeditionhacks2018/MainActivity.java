@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         viewPager.setOffscreenPageLimit(3);
 
         final PageAdapter adapter = new PageAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount(), mapTrackYourself, MapReportingTool);
+                (getFragmentManager(), tabLayout.getTabCount(), mapTrackYourself, MapReportingTool);
         viewPager.setAdapter(adapter);
 
         tabLayout.setOnTabSelectedListener(this);

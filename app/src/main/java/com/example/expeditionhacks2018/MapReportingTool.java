@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapReportingTool extends Fragment {
+public class MapReportingTool extends android.app.Fragment {
 
 
     public MapReportingTool() {

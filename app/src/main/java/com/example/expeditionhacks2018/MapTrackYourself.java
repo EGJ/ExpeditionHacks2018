@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
+import com.here.android.mpa.mapping.MapView;
 
 
 /**
@@ -23,7 +25,7 @@ import com.here.android.mpa.mapping.MapFragment;
  * Use the {@link MapTrackYourself#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapTrackYourself extends Fragment {
+public class MapTrackYourself extends android.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,6 +80,28 @@ public class MapTrackYourself extends Fragment {
 
         mView = inflater.inflate(R.layout.fragment_map_track_yourself, container, false);
 
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapfragment);
+
+//    com.here.android.mpa.common.Map
+
+// Set up disk cache path for the map service for this application
+
+            mapFragment.init(new OnEngineInitListener() {
+                @Override
+                public void onEngineInitializationCompleted(OnEngineInitListener.Error error) {
+                    if (error == OnEngineInitListener.Error.NONE) {
+// retrieve a reference of the map from the map fragment
+                        map = mapFragment.getMap();
+// Set the map center to the Vancouver region (no animation)
+                        map.setCenter(new GeoCoordinate(49.196261, -123.004773, 0.0),
+                                Map.Animation.NONE);
+// Set the zoom level to the average between min and max
+                        map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 2);
+                    } else {
+                        System.out.println("ERROR: Cannot initialize Map Fragment");
+                    }
+                }
+            });
 
 
 
@@ -90,7 +114,12 @@ public class MapTrackYourself extends Fragment {
 
 
 
-        // Inflate the layout for this fragment
+
+
+
+
+
+// Inflate the layout for this fragment
         return mView;
 
 
