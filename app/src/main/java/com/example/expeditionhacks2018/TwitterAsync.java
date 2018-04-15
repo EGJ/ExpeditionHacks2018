@@ -1,5 +1,7 @@
 package com.example.expeditionhacks2018;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -36,23 +38,33 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Created by Greg on 2/3/18.
+ */
+
 class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisResults>> {
     HashMap<LatLng, AnalysisResults> analysisRegionHashMap = new HashMap<>();
+    boolean isBearerComputed = false;
+    String[] bearerToken = new String[1];
     DataRelay dataRelay;
     Context ctx;
     String token = "";
     View rootView;
+    private ColorDrawable mDimDrawable;
     String twitterQuery = "";
+    Fragment delegate = null;
 
 
-    public TwitterAsync(Context ctx, String token, View rootView) {
+
+
+    public TwitterAsync(Context ctx, String token, View rootView)
+    {
         this.ctx = ctx;
-        this.token = token;
+        token = token;
         this.rootView = rootView;
 
         return;
     }
-
     @Override
     protected HashMap<LatLng, AnalysisResults> doInBackground(String... params) {
         String query = params[0];
@@ -61,20 +73,48 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
         return this.analysisRegionHashMap;
     }
 
+
+//    @Override
+//    protected void onPostExecute(HashMap<LatLng, AnalysisResults> result) {
+////        progressBar.setVisibility(View.GONE);
+////        txt.setText(result);//        btn.setText("Restart");
+//        GoogleProgressBar googleProgressBar =  rootView.findViewById(R.id.google_progress_twitter);
+//        googleProgressBar.setVisibility(View.INVISIBLE);
+//        TwitterFeed pleaseWork = (TwitterFeed) delegate;
+//
+//        ImageView twitterImg =  rootView.findViewById(R.id.twitterImg);
+////        FloatingSearchView floatingSearchView =  rootView.findViewById(R.id.floating_search_view);
+////        floatingSearchView.setVisibility(View.VISIBLE);
+//        fadeInAndShowImg(twitterImg);
+//        pleaseWork.processFinish(result);
+//
+//
+//
+//
+//
+//    }
     @Override
     protected void onPreExecute() {
+//        txt.setText("Task Starting...");
         dataRelay = (DataRelay) ctx.getApplicationContext();
-        /*GoogleProgressBar googleProgressBar =  rootView.findViewById(R.id.google_progress_twitter);
+       GoogleProgressBar googleProgressBar =  rootView.findViewById(R.id.google_progress_twitter);
         ImageView twitterImg =  rootView.findViewById(R.id.twitterImg);
         fadeOutAndHideImage(twitterImg);
         googleProgressBar.setVisibility(View.VISIBLE);
-        googleProgressBar.setIndeterminate(true);*/
+        googleProgressBar.setIndeterminate(true);
+//        FloatingSearchView floatingSearchView =  rootView.findViewById(R.id.floating_search_view);
+//        floatingSearchView.setVisibility(View.INVISIBLE);
+
+
     }
 
 
     public String get_bearer() {
         String authString = "2uSBRzRORaM2qBguhwPug7LSe:T42SCO6DZ084AKvcnbC5N7cdlQ60UW7SuSfsU4jCSheX6jpQVh";
         String basicAuth = "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
+//        byte [] array  = java.util.Base64.getEncoder().encode(authString.getBytes());
+//        String testing = array.;
+
 
         String postBody = "grant_type=client_credentials";
 
@@ -83,6 +123,7 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
         try {
             url = new URL("https://api.twitter.com/oauth2/token?grant_type=client_credentials");
             urlConnection = (HttpURLConnection) url.openConnection();
+            String testingThisthing = String.valueOf(postBody.getBytes().length);
 
             urlConnection.setRequestProperty("Authorization", basicAuth);
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
@@ -144,16 +185,52 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
     public void callTwitterAPI() {
 
         final HashMap<LatLng, ArrayList<String>> totalTweets = new HashMap<>();
-        if (token.equals("")) {
+        if (token.equals(""))
+        {
             token = get_bearer();
         }
+
+        int count = 0;
+        //consider making this divided by 3.
+//        for (final LatLng somePosition: dataRelay.nearByCodes) {
+//
+//            if(count == dataRelay.nearByCodes.size()/3)
+//            {
+//                break;
+//            }
+//            count++;
+//            ArrayList<String> tweets = makeActualCall(token, somePosition.latitude, somePosition.longitude);
+//            totalTweets.put(somePosition, tweets);
+//        }
+        LatLng somePosition = new LatLng(dataRelay.someLocation.getLatitude(), dataRelay.someLocation.getLongitude());
+        ArrayList<String> tweets = makeActualCall(token, somePosition.latitude, somePosition.longitude);
+            totalTweets.put(somePosition, tweets);
+
+
+
+
+
+
+        for (final LatLng pos : totalTweets.keySet())
+        {
+            final ArrayList<String> list = totalTweets.get(pos);
+
+            String listString = String.join(", ", list);
+            analyzeSentimentGroupTweets(listString, pos);
+
+        }
+
+        System.out.println(analysisRegionHashMap.toString());
+
+
 
 
 
     }
 
 
-    public ArrayList<String> makeActualCall(String access_token, Double lati, Double longi) {
+    public ArrayList<String> makeActualCall(String access_token, Double lati, Double longi)
+    {
         String lat = Double.toString(lati);
         String lon = Double.toString(longi);
         String max_range = Integer.toString(10);
@@ -214,13 +291,16 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
         }
     }
 
-    public void analyzeSentimentGroupTweets(String s, LatLng position) {
+    public void analyzeSentimentGroupTweets(String s, LatLng position)
+    {
 
-        if (s.equals("")) {
+        if (s.equals(""))
+        {
             return;
         }
         //take care of duplicate entries of areas
-        if (analysisRegionHashMap.keySet().contains(position)) {
+        if (analysisRegionHashMap.keySet().contains(position))
+        {
             return;
         }
 
@@ -232,7 +312,7 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
 
         CategoriesOptions categories = new CategoriesOptions();
 
-        EmotionOptions emotion = new EmotionOptions.Builder().build();
+        EmotionOptions emotion= new EmotionOptions.Builder().build();
 
         EntitiesOptions entitiesOptions = new EntitiesOptions.Builder()
                 .emotion(true)
@@ -265,26 +345,65 @@ class TwitterAsync extends AsyncTask<String, Integer, HashMap<LatLng, AnalysisRe
     }
 
 
-    private void fadeOutAndHideImage(final ImageView img) {
-        if (img.getVisibility() == View.GONE) {
+    private void fadeOutAndHideImage(final ImageView img)
+    {
+        if (img.getVisibility() == View.GONE)
+        {
             return;
         }
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         fadeOut.setDuration(300);
 
-        fadeOut.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationEnd(Animation animation) {
+        fadeOut.setAnimationListener(new Animation.AnimationListener()
+        {
+            public void onAnimationEnd(Animation animation)
+            {
                 img.setVisibility(View.GONE);
             }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationStart(Animation animation) {}
         });
 
         img.startAnimation(fadeOut);
     }
+
+    private void fadeDimBackground(int from, int to, Animator.AnimatorListener listener) {
+        ValueAnimator anim = ValueAnimator.ofInt(from, to);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                int value = (Integer) animation.getAnimatedValue();
+                mDimDrawable.setAlpha(value);
+            }
+        });
+        if (listener != null) {
+            anim.addListener(listener);
+        }
+        anim.setDuration(350);
+        anim.start();
+    }
+    private void fadeInAndShowImg(final ImageView img)
+    {
+
+        Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new AccelerateInterpolator());
+        fadeIn.setDuration(700);
+
+        fadeIn.setAnimationListener(new Animation.AnimationListener()
+        {
+            public void onAnimationEnd(Animation animation)
+            {
+                img.setVisibility(View.VISIBLE);
+            }
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationStart(Animation animation) {}
+        });
+
+        img.startAnimation(fadeIn);
+    }
+
+
+
 }

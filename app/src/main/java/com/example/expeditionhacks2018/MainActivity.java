@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         tabLayout.addTab(tabLayout.newTab().setText("Track Yourself"));
         tabLayout.addTab(tabLayout.newTab().setText("Reporting Tool"));
-        tabLayout.addTab(tabLayout.newTab().setText("TBD?"));
+        tabLayout.addTab(tabLayout.newTab().setText("Twitter"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);

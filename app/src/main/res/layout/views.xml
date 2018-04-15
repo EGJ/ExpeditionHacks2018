@@ -13,13 +13,29 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="State: "/>
+            android:text="State: " />
 
         <Spinner
             android:id="@+id/personState"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/states"/>
+            android:text="City: " />
+
+        <Spinner
+            android:id="@+id/personCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout
@@ -32,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Sex:" />
+            android:text="Gender:" />
 
         <RadioGroup
             android:id="@+id/genderGroup"
@@ -121,6 +137,39 @@
         </RadioGroup>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Do you smoke?:" />
+
+        <RadioGroup
+            android:id="@+id/smokerGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/smokerRB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes" />
+
+            <RadioButton
+                android:id="@+id/nonSmokerRB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No" />
+        </RadioGroup>
+    </LinearLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -192,50 +241,85 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/emergencyContact"
+            android:id="@+id/optionallyInsured"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:hint="Emergency Contact (Phone Number)"
+            android:hint="Insurance Amount"
+            android:text="$"
             android:inputType="number">
 
         </EditText>
 
     </android.support.design.widget.TextInputLayout>
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/pinNumber"
+            android:id="@+id/peopleCovered"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:hint="5 Digit Pin "
-            android:inputType="number"
-
-            android:maxLength="5">
-
-        </EditText>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/additionalComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:hint="Additional Comments"
+            android:hint="Number of People Covered"
             android:inputType="number"
             android:maxLength="2">
 
         </EditText>
 
     </android.support.design.widget.TextInputLayout>
+
+    <!-- change this to be one vertical linear layouts
+    with two linear horizontal layouts inside them to spread out the area
+    a bit more-->
+    <LinearLayout
+        android:id="@+id/conditionsLLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/conditionsInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Preexisting Conditions">
+
+            </EditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/conditionsSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+        </Spinner>
+
+
+
+        <ListView
+            android:id="@+id/preexistingConditionsList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:scrollbars="vertical" />
+
+        <ImageButton
+            android:id="@+id/submitConditionButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_finish" />
+
+    </LinearLayout>
 
 </LinearLayout>

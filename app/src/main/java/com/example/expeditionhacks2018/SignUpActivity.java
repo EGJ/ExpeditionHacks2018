@@ -183,7 +183,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 });
                 animator.start();
 
-                startActivity(new Intent(SignUpActivity.this,MainActivity.class));
+                startActivity(new Intent(SignUpActivity.this,UserQuestions.class));
                 finish();
 
             }

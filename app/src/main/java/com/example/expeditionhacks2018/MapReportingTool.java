@@ -90,7 +90,16 @@ public class MapReportingTool extends Fragment implements OnMapReadyCallback, Go
         super.onViewCreated(view, savedInstanceState);
 
         mapView = mView.findViewById(R.id.map2);
-        mapView.onCreate(null);
+        try
+        {
+            mapView.onCreate(null);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            mapView.onCreate(null);
+        }
         mapView.onResume();
         mapView.getMapAsync(this);
         @SuppressLint("ResourceType") View locationButton = ((View) mView.findViewById(1).getParent()).findViewById(2);

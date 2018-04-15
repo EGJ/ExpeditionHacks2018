@@ -690,7 +690,16 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
         super.onViewCreated(view, savedInstanceState);
 
         mapView = mView.findViewById(R.id.map1);
-        mapView.onCreate(null);
+        try
+        {
+            mapView.onCreate(null);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            mapView.onCreate(null);
+        }
         mapView.onResume();
         mapView.getMapAsync(this);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -894,8 +903,8 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
         Log.d(TAG, "createGeofence");
         return new Geofence.Builder()
                 .setRequestId(Geo_Id)
-                .setCircularRegion(latLng.latitude, latLng.longitude, radius*1600)
-                .setExpirationDuration(duration)
+                .setCircularRegion(latLng.latitude, latLng.longitude, radius*1600.0f)
+                .setExpirationDuration(60 * 60 * 1000)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
                         | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();

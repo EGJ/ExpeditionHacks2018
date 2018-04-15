@@ -53,21 +53,32 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
     private EditText income;
     private RadioGroup employment;
     private RadioGroup maritialStatus;
-    private EditText emergencyContact;
-    private EditText pin;
-    private EditText additionalInfo;
+    private RadioGroup smoker;
+    private EditText optionallyInsured;
+    private EditText peopleCovered;
+    private LinearLayout conditionsLLayout;
+    private EditText conditionsInput;
+    private Spinner conditionsSpinner;
+    private ImageButton submitConditionsButton;
+    private ListView priorConditions;
+    private ArrayList<String> conditionsList = new ArrayList<>();
+    private int lowConditions;
+    private int medConditions;
+    private int highConditions;
 
     private String stateInput = "";
+    private String cityInput = "";
     private String sexInput = "";
     private String ageInput;
-    private String employmentInput = "";
+    private  String employmentInput = "";
     private String maritalstatusInput = "";
+    private String optionalinsuredInput;
+    private  String peoplecoveredInput;
+    private String preexisting;
+    private String smokerInput = "";
     private String weightInput;
     private String heightInput;
     private String incomeInput;
-    private String emergencyContactInput;
-    private String pinInput;
-    private String additionalInfoInput;
 
 
 
@@ -112,20 +123,28 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
             dbResponse.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    //Prefill all the user's information if they are already logged in
                     ageInput = (String) dataSnapshot.child("age").getValue();
                     stateInput = (String) dataSnapshot.child("state").getValue();
+                    cityInput = (String) dataSnapshot.child("city").getValue();
                     sexInput = (String) dataSnapshot.child("sex").getValue();
                     employmentInput = (String) dataSnapshot.child("employment").getValue();
                     maritalstatusInput = (String) dataSnapshot.child("maritalstatus").getValue();
+                    optionalinsuredInput = (String) dataSnapshot.child("optionalinsured").getValue();
+                    peoplecoveredInput = (String) dataSnapshot.child("peoplecovered").getValue();
+                    preexisting = (String) dataSnapshot.child("preexisting").getValue();
+                    smokerInput = (String) dataSnapshot.child("smoker").getValue();
                     weightInput = (String) dataSnapshot.child("weight").getValue();
                     heightInput = (String) dataSnapshot.child("height").getValue();
                     incomeInput = (String) dataSnapshot.child("income").getValue();
-                    emergencyContactInput = (String) dataSnapshot.child("emergencyContact").getValue();
-                    pinInput = (String) dataSnapshot.child("pin").getValue();
-                    additionalInfoInput = (String) dataSnapshot.child("additionalInfo").getValue();
 
                     verticalStepper();
+
+
+
+
+
+
+
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -145,7 +164,7 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
 
     public void verticalStepper()
     {
-        String[] mySteps = {"State", "Age", "Sex", "Height (in)", "Weight (lbs)", "Annual Income", "Employment", "Maritial Status", "Emergency Contact", "5 Digit Pin", "Additional Information"};
+        String[] mySteps = {"State", "City", "Age", "Sex", "Height (in)", "Weight (lbs)", "Annual Income", "Employment", "Maritial Status", "Smoker", "Optional Insured", "People Covered", "Preconditions"};
         int colorPrimary = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary);
         int colorPrimaryDark = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
 
@@ -171,34 +190,40 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
                 view = createStateStep();
                 break;
             case 1:
-                view = createAgeStep();
+                view = createCityStep();
                 break;
             case 2:
-                view = createSexStep();
+                view = createAgeStep();
                 break;
             case 3:
-                view = createHeightStep();
+                view = createSexStep();
                 break;
             case 4:
-                view = createWeightStep();
+                view = createHeightStep();
                 break;
             case 5:
-                view = createIncomeStep();
+                view = createWeightStep();
                 break;
             case 6:
-                view = createEmploymentStep();
+                view = createIncomeStep();
                 break;
             case 7:
-                view = createMaritialStatusStep();
+                view = createEmploymentStep();
                 break;
             case 8:
-                view = createEmergencyContactStep();
+                view = createMaritialStatusStep();
                 break;
             case 9:
-                view = createPinStep();
+                view = createSmokerStep();
                 break;
             case 10:
-                view = createAdditionalInfoStep();
+                view = createOptionalInsuredStep();
+                break;
+            case 11:
+                view = createPeopleCoveredStep();
+                break;
+            case 12:
+                view = createPreconditionsStep();
                 break;
             default:
                 break;
@@ -214,33 +239,40 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
             case 1:
-                checkAge();
+                //First selection is selected by default
+                verticalStepperForm.setActiveStepAsCompleted();
                 break;
             case 2:
-                checkSex();
+                checkAge();
                 break;
             case 3:
-                checkHeight();
+                checkSex();
                 break;
             case 4:
-                checkWeight();
+                checkHeight();
                 break;
             case 5:
-                checkIncome();
+                checkWeight();
                 break;
             case 6:
-                checkEmployment();
+                checkIncome();
                 break;
             case 7:
-                checkMaritialStatus();
+                checkEmployment();
                 break;
             case 8:
-                checkEmergencyContact();
+                checkMaritialStatus();
                 break;
             case 9:
-                checkPin();
+                checkIfSmoker();
+                break;
             case 10:
-                //Additional Information Optional
+                checkOptionallyInsured();
+                break;
+            case 11:
+                checkPeopleCovered();
+                break;
+            case 12:
                 verticalStepperForm.setActiveStepAsCompleted();
                 break;
             default:
@@ -255,9 +287,9 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         DatabaseReference mDatabase = database.getReference();
         String user = mAuth.getCurrentUser().getUid();
-
         mDatabase.child("Users").child(user).child("age").setValue(age.getText().toString());
         mDatabase.child("Users").child(user).child("state").setValue(state.getSelectedItem().toString());
+        mDatabase.child("Users").child(user).child("city").setValue(city.getSelectedItem().toString());
         RadioButton MaleradioButton = findViewById(R.id.maleRB);
         if (MaleradioButton.isChecked())
         {
@@ -289,9 +321,63 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
         else {
             mDatabase.child("Users").child(user).child("maritalstatus").setValue("single");
         }
-        mDatabase.child("Users").child(user).child("emergencyContact").setValue(emergencyContact.getText().toString());
-        mDatabase.child("Users").child(user).child("pin").setValue(pin.getText().toString());
-        mDatabase.child("Users").child(user).child("additionalInfo").setValue(additionalInfo.getText().toString());
+
+        RadioButton smoker = findViewById(R.id.smokerRB);
+        if (smoker.isChecked())
+        {
+            mDatabase.child("Users").child(user).child("smoker").setValue("true");
+        }
+        else
+        {
+            mDatabase.child("Users").child(user).child("smoker").setValue("false");
+        }
+
+        mDatabase.child("Users").child(user).child("optionalinsured").setValue(optionallyInsured.getText().toString());
+        mDatabase.child("Users").child(user).child("peoplecovered").setValue(peopleCovered.getText().toString());
+        mDatabase.child("Users").child(user).child("preexisting").setValue(conditionsList.toString());
+
+
+        int income = Integer.parseInt(this.income.getText().toString().replace("$", ""));
+        int height = Integer.parseInt(this.height.getText().toString());
+        int peopleCovered = Integer.parseInt(this.peopleCovered.getText().toString());
+        int optionallyInsured = Integer.parseInt(this.optionallyInsured.getText().toString().replace("$", ""));
+        int weight = Integer.parseInt(this.weight.getText().toString());
+        int low =  lowConditions;
+        int medium = medConditions;
+        int high = highConditions;
+        int age = Integer.parseInt(this.age.getText().toString());
+
+        RadioButton isMarried = findViewById(this.maritialStatus.getCheckedRadioButtonId());
+        RadioButton gender = findViewById(this.sex.getCheckedRadioButtonId());
+        String marital_status = String.valueOf(isMarried.getText().charAt(0));
+        String tobacco = smoker.getText().toString();
+        String sex = String.valueOf(gender.getText().charAt(0));
+
+        JSONObject j = new JSONObject();
+        JSONObject jq = new JSONObject();
+
+        try {
+            j.put("STATE", state);
+            j.put("ANNUAL_INCOME", income);
+            j.put("HEIGHT", height);
+            j.put("PEOPLE_COVERED", peopleCovered);
+            j.put("OPTIONAL_INSURED", optionallyInsured);
+            j.put("WEIGHT", weight);
+            j.put("LOW", low);
+            j.put("MEDIUM", medium);
+            j.put("HIGH", high);
+            j.put("AGE", age);
+            j.put("MARITAL_STATUS", marital_status);
+            j.put("TOBACCO", tobacco);
+            j.put("SEX", sex);
+
+            jq.put("customer_data", j);
+        } catch (JSONException e) {
+
+        }
+        /*sendRequestToML a = new sendRequestToML();
+        a.delegate = this;
+        a.execute(jq.toString());*/
     }
 
     private View createStateStep() {
@@ -307,6 +393,22 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
         state = spinnerLayout.findViewById(R.id.personState);
         ((ViewGroup) state.getParent()).removeView(state);
         return state;
+    }
+
+    private View createCityStep() {
+        //THIS IS WRONG, FILL WITH CITIES NOT STATE A
+        if (fromMain)
+        {
+            city = parentLayout.findViewById(R.id.personCity);
+            city.setPrompt(cityInput);
+            ((ViewGroup) city.getParent()).removeView(city);
+            return city;
+        }
+        LayoutInflater inflater = LayoutInflater.from(getBaseContext());
+        LinearLayout spinnerLayout = (LinearLayout) inflater.inflate(R.layout.views, null, false);
+        city = spinnerLayout.findViewById(R.id.personState);
+        ((ViewGroup) city.getParent()).removeView(city);
+        return city;
     }
 
     private View createAgeStep() {
@@ -515,138 +617,216 @@ public class UserQuestions extends Activity implements VerticalStepperForm {
         return maritialStatus;
     }
 
-    private View createEmergencyContactStep(){
-        emergencyContact = parentLayout.findViewById(R.id.emergencyContact);
+    private View createSmokerStep() {
+        smoker = parentLayout.findViewById(R.id.smokerGroup);
         if (fromMain)
         {
 
-            emergencyContact.setText(emergencyContactInput.toString());
+            if (smokerInput.equals("true"))
+            {
+                RadioButton radioButton = parentLayout.findViewById(R.id.smokerRB);
+                radioButton.setChecked(true);
+            }
+            else {
+                RadioButton radioButton = parentLayout.findViewById(R.id.nonSmokerRB);
+                radioButton.setChecked(true);
+            }
         }
-        ((ViewGroup) emergencyContact.getParent()).removeView(emergencyContact);
-        weight.addTextChangedListener(new TextWatcher() {
+        ((ViewGroup) smoker.getParent()).removeView(smoker);
+        smoker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                checkIfSmoker();
+                smoker.setOnCheckedChangeListener(null);
+            }
+        });
+        return smoker;
+    }
+
+    private View createOptionalInsuredStep() {
+        optionallyInsured = parentLayout.findViewById(R.id.optionallyInsured);
+        if (fromMain)
+        {
+
+            optionallyInsured.setText(optionalinsuredInput.toString());
+        }
+        ((ViewGroup) optionallyInsured.getParent()).removeView(optionallyInsured);
+        optionallyInsured.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkEmergencyContact();
+                String optString = optionallyInsured.getText().toString();
+                if (!optString.startsWith("$")) {
+                    optionallyInsured.setText("$" + optString.replace("$", ""));
+                }
+                checkOptionallyInsured();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
-        return emergencyContact;
+        return optionallyInsured;
     }
 
-    private View createPinStep(){
-        pin = parentLayout.findViewById(R.id.pinNumber);
+    private View createPeopleCoveredStep() {
+        peopleCovered = parentLayout.findViewById(R.id.peopleCovered);
         if (fromMain)
         {
 
-            pin.setText(pinInput.toString());
+            peopleCovered.setText(peoplecoveredInput.toString());
         }
-        ((ViewGroup) pin.getParent()).removeView(pin);
-        weight.addTextChangedListener(new TextWatcher() {
+        ((ViewGroup) peopleCovered.getParent()).removeView(peopleCovered);
+        peopleCovered.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkPin();
+                checkPeopleCovered();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
-        return pin;
+        return peopleCovered;
     }
+    //what are we doing about this for displaying metrics.
+    private View createPreconditionsStep() {
+        conditionsLLayout = parentLayout.findViewById(R.id.conditionsLLayout);
+        priorConditions = parentLayout.findViewById(R.id.preexistingConditionsList);
+        conditionsInput = parentLayout.findViewById(R.id.conditionsInput);
+        conditionsSpinner = parentLayout.findViewById(R.id.conditionsSpinner);
+        submitConditionsButton = parentLayout.findViewById(R.id.submitConditionButton);
 
-    private View createAdditionalInfoStep(){
-        additionalInfo = parentLayout.findViewById(R.id.additionalComments);
         if (fromMain)
         {
+            String user = mAuth.getCurrentUser().getUid();
+            final DatabaseReference dbResponse = mDatabase.child("Users").child(user);
+            dbResponse.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //String arrayAsString = dataSnapshot.child("preexisting").getValue().toString();
+                    //conditionsList = (ArrayList<String>) Arrays.asList(arrayAsString.replace("[", "").replace("]", "").split(","));
+                }
 
-            additionalInfo.setText(additionalInfoInput.toString());
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
         }
-        ((ViewGroup) additionalInfo.getParent()).removeView(additionalInfo);
-        return additionalInfo;
+
+        ((ViewGroup) conditionsLLayout.getParent()).removeView(conditionsLLayout);
+
+        priorConditions.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, conditionsList));
+
+        submitConditionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String conditionsText = conditionsInput.getText().toString();
+                if (!conditionsText.equals("")) {
+                    conditionsList.add(conditionsText);
+                    ((ArrayAdapter) priorConditions.getAdapter()).notifyDataSetChanged();
+                    conditionsInput.setText("");
+                    String selectedSpinner = (String) conditionsSpinner.getSelectedItem();
+                    if (selectedSpinner.equals("Low")) {
+                        lowConditions++;
+                    } else if (selectedSpinner.equals("Medium")) {
+                        medConditions++;
+                    } else {
+                        highConditions++;
+                    }
+                } else {
+                    Toast.makeText(UserQuestions.this, "Please add a name for this condition", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return conditionsLLayout;
     }
 
     private void checkAge() {
         if (!age.getText().toString().equals("")) {
-            verticalStepperForm.setStepAsCompleted(1);
+            verticalStepperForm.setStepAsCompleted(2);
         } else {
-            verticalStepperForm.setStepAsUncompleted(1, "Must Enter An Age");
+            verticalStepperForm.setStepAsUncompleted(2, "Must Enter An Age");
         }
     }
 
     private void checkSex() {
         if (sex.getCheckedRadioButtonId() != -1) {
-            verticalStepperForm.setStepAsCompleted(2);
+            verticalStepperForm.setStepAsCompleted(3);
         } else {
-            verticalStepperForm.setStepAsUncompleted(2, "Must Select A Value");
+            verticalStepperForm.setStepAsUncompleted(3, "Must Select A Value");
         }
     }
 
     private void checkHeight() {
         if (!height.getText().toString().equals("")) {
-            verticalStepperForm.setStepAsCompleted(3);
+            verticalStepperForm.setStepAsCompleted(4);
         } else {
-            verticalStepperForm.setStepAsUncompleted(3, "Must Enter A Height");
+            verticalStepperForm.setStepAsUncompleted(4, "Must Enter A Height");
         }
     }
 
     private void checkWeight() {
         if (!weight.getText().toString().equals("")) {
-            verticalStepperForm.setStepAsCompleted(4);
+            verticalStepperForm.setStepAsCompleted(5);
         } else {
-            verticalStepperForm.setStepAsUncompleted(4, "Must Enter An Weight");
+            verticalStepperForm.setStepAsUncompleted(5, "Must Enter An Weight");
         }
     }
 
     private void checkIncome() {
         if (!income.getText().toString().equals("$")) {
-            verticalStepperForm.setStepAsCompleted(5);
+            verticalStepperForm.setStepAsCompleted(6);
         } else {
-            verticalStepperForm.setStepAsUncompleted(5, "Must Enter An Income");
+            verticalStepperForm.setStepAsUncompleted(6, "Must Enter An Income");
         }
     }
 
     private void checkEmployment() {
         if (employment.getCheckedRadioButtonId() != -1) {
-            verticalStepperForm.setStepAsCompleted(6);
+            verticalStepperForm.setStepAsCompleted(7);
         } else {
-            verticalStepperForm.setStepAsUncompleted(6, "Must Select An Employment Status");
+            verticalStepperForm.setStepAsUncompleted(7, "Must Select An Employment Status");
         }
     }
 
     private void checkMaritialStatus() {
         if (maritialStatus.getCheckedRadioButtonId() != -1) {
-            verticalStepperForm.setStepAsCompleted(7);
+            verticalStepperForm.setStepAsCompleted(8);
         } else {
-            verticalStepperForm.setStepAsUncompleted(7, "Must Select A Marital Status");
+            verticalStepperForm.setStepAsUncompleted(8, "Must Select A Marital Status");
         }
     }
 
-    private void checkEmergencyContact() {
-        //if (!age.getText().toString().equals("")) {
-            verticalStepperForm.setStepAsCompleted(8);
-        //} else {
-        //    verticalStepperForm.setStepAsUncompleted(8, "Must Enter An Age");
-        //}
+    private void checkIfSmoker() {
+        if (smoker.getCheckedRadioButtonId() != -1) {
+            verticalStepperForm.setStepAsCompleted(9);
+        } else {
+            verticalStepperForm.setStepAsUncompleted(9, "Must Select A Value");
+        }
     }
 
-    private void checkPin() {
-        if (pin.getText().toString().equals("")) {
-            verticalStepperForm.setStepAsUncompleted(9, "Please Enter A Pin");
-        } else if(pin.getText().length() != 5){
-            verticalStepperForm.setStepAsUncompleted(9, "Pin Must Be 5 Digits");
-        }else{
-            verticalStepperForm.setStepAsCompleted(9);
+    private void checkOptionallyInsured() {
+        if (!optionallyInsured.getText().toString().equals("$")) {
+            verticalStepperForm.setStepAsCompleted(10);
+        } else {
+            verticalStepperForm.setStepAsUncompleted(10, "Must Enter A Insurance Amount");
+        }
+    }
+
+    private void checkPeopleCovered() {
+        if (!peopleCovered.getText().toString().equals("")) {
+            verticalStepperForm.setStepAsCompleted(11);
+        } else {
+            verticalStepperForm.setStepAsUncompleted(11, "Must Enter The Number Of People Covered");
         }
     }
 }
