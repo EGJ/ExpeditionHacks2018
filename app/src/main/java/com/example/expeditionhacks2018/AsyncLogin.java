@@ -45,12 +45,7 @@ public class AsyncLogin extends AsyncTask<String, Integer, Location> {
     @Override
     protected void onPreExecute() {
 
-
-
-
-
     }
-
 
 
     @Override
@@ -58,8 +53,6 @@ public class AsyncLogin extends AsyncTask<String, Integer, Location> {
         Location location = getLastKnownLocation();
         dataRelay.someLocation = location;
         return location;
-
-
     }
 
     @Override
@@ -87,8 +80,6 @@ public class AsyncLogin extends AsyncTask<String, Integer, Location> {
             }
         }
         return bestLocation;
-
-
     }
 
 
