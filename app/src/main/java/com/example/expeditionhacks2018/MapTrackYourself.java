@@ -1,6 +1,7 @@
 package com.example.expeditionhacks2018;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,11 +17,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -138,6 +142,7 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
     private DataRelay dataRelay;
     private GoogleMap map;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
+    private com.google.android.gms.maps.MapView mapView;
 
 
 
@@ -164,12 +169,38 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
+
+        super.onViewCreated(view, savedInstanceState);
+
+        mapView = mView.findViewById(R.id.map1);
+        mapView.onCreate(null);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+        PlaceAutocompleteFragment autocompleteFragment  = (PlaceAutocompleteFragment)getActivity().getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        @SuppressLint("ResourceType") View locationButton = ((View) mView.findViewById(1).getParent()).findViewById(2);
+
+        // and next place it, for exemple, on bottom right (as Google Maps app)
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+        // position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 30);
+
+
+        // Register a listener to receive callbacks when a place has been selected or an error has
+        // occurred.
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+
+
+
+
     }
+
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -219,6 +250,8 @@ public class MapTrackYourself extends Fragment implements OnMapReadyCallback, Pl
 //        LatLng pp = new LatLng();
 
     }
+
+
 
     private void zoomToLocation() throws InterruptedException {
         if (ActivityCompat.checkSelfPermission(mView.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(mView.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

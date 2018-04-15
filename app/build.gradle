@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'com.google.firebase:firebase-crash:15.0.0'
     implementation 'com.google.android.gms:play-services-maps:15.0.0'
+    compile 'com.google.android.gms:play-services-location:15.0.0'
     compile 'com.google.android.gms:play-services-places:15.0.0'
     implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:0.9.9'
     implementation 'devlight.io:navigationtabbar:1.2.5'

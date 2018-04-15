@@ -23,7 +23,7 @@ public class splashActivity extends AppCompatActivity  implements  AsyncLoginDel
 
         mLVBlock.setViewColor(Color.rgb(245,209,22));
         mLVBlock.setShadowColor(Color.GRAY);
-        mLVBlock.startAnim(1000);
+        mLVBlock.startAnim();
 
         //this is an async task that returns here using interfaces which then goes to main activity
         getMapMarkersFromFirebase();
