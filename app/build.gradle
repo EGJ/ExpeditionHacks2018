@@ -30,9 +30,9 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compile (name:'HERE-sdk', ext:'aar')
-    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.support:support-v13:27.1.1'
-    compile 'com.google.maps.android:android-maps-utils:0.5+'
+    compile 'com.google.maps.android:android-maps-utils:0.5'
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
@@ -46,9 +46,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.0'
     compile 'com.google.android.gms:play-services-location:15.0.0'
     compile 'com.google.android.gms:play-services-places:15.0.0'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:0.9.9'
     implementation 'devlight.io:navigationtabbar:1.2.5'
-    compile 'com.jpardogo.googleprogressbar:library:(latest version)'
+    compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     implementation 'com.nightonke:boommenu:2.1.1'
     implementation 'com.jaredrummler:material-spinner:1.1.0'
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
